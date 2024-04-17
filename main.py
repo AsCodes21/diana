@@ -10,7 +10,6 @@ from keep_alive import keep_alive
 import os
 import googletrans
 import youtube_dl
-import 
 
 translator = googletrans.Translator()
 client = commands.Bot(command_prefix="$", intents=discord.Intents.all())
