@@ -8,7 +8,7 @@ import requests
 import random
 from keep_alive import keep_alive
 import os
-import googleTrans
+import googletrans
 import youtube_dl
 
 client = commands.Bot(command_prefix="$", intents=discord.Intents.all())
