@@ -8,7 +8,11 @@ import requests
 import random
 from keep_alive import keep_alive
 import os
+import googletrans
+import youtube_dl
+import 
 
+translator = googletrans.Translator()
 client = commands.Bot(command_prefix="$", intents=discord.Intents.all())
 
 @client.event
@@ -222,6 +226,235 @@ async def createchannel(ctx, channel_name):
     await ctx.send("I don't have permission to create channels.")
   except discord.HTTPException:
     await ctx.send("An error occurred while creating the channel.")
+
+#Transranto component start
+languages = {
+    "Afrikaans": "af",
+    "Albanian": "sq",
+    "Amharic": "am",
+    "Arabic": "ar",
+    "Armenian": "hy",
+    "Azerbaijani": "az",
+    "Basque": "eu",
+    "Belarusian": "be",
+    "Bengali": "bn",
+    "Bosnian": "bs",
+    "Bulgarian": "bg",
+    "Catalan": "ca",
+    "Cebuano": "ceb",
+    "Chichewa": "ny",
+    "Chinese": "zh-cn",
+    "Corsican": "co",
+    "Croatian": "hr",
+    "Czech": "cs",
+    "Danish": "da",
+    "Dutch": "nl",
+    "English": "en",
+    "Esperanto": "eo",
+    "Estonian": "et",
+    "Filipino": "tl",
+    "Finnish": "fi",
+    "French": "fr",
+    "Frisian": "fy",
+    "Galician": "gl",
+    "Georgian": "ka",
+    "German": "de",
+    "Greek": "el",
+    "Gujarati": "gu",
+    "Haitian Creole": "ht",
+    "Hausa": "ha",
+    "Hawaiian": "haw",
+    "Hebrew": "iw",
+    "Hindi": "hi",
+    "Hmong": "hmn",
+    "Hungarian": "hu",
+    "Icelandic": "is",
+    "Igbo": "ig",
+    "Indonesian": "id",
+    "Irish": "ga",
+    "Italian": "it",
+    "Japanese": "ja",
+    "Javanese": "jw",
+    "Kannada": "kn",
+    "Kazakh": "kk",
+    "Khmer": "km",
+    "Kinyarwanda": "rw",
+    "Korean": "ko",
+    "Kurdish": "ku",
+    "Kyrgyz": "ky",
+    "Lao": "lo",
+    "Latin": "la",
+    "Latvian": "lv",
+    "Lithuanian": "lt",
+    "Luxembourgish": "lb",
+    "Macedonian": "mk",
+    "Malagasy": "mg",
+    "Malay": "ms",
+    "Malayalam": "ml",
+    "Maltese": "mt",
+    "Maori": "mi",
+    "Marathi": "mr",
+    "Mongolian": "mn",
+    "Myanmar (Burmese)": "my",
+    "Nepali": "ne",
+    "Norwegian": "no",
+    "Odia (Oriya)": "or",
+    "Pashto": "ps",
+    "Persian": "fa",
+    "Polish": "pl",
+    "Portuguese": "pt",
+    "Punjabi": "pa",
+    "Romanian": "ro",
+    "Russian": "ru",
+    "Samoan": "sm",
+    "Scots Gaelic": "gd",
+    "Serbian": "sr",
+    "Sesotho": "st",
+    "Shona": "sn",
+    "Sindhi": "sd",
+    "Sinhala (Sinhalese)": "si",
+    "Slovak": "sk",
+    "Slovenian": "sl",
+    "Somali": "so",
+    "Spanish": "es",
+    "Sundanese": "su",
+    "Swahili": "sw",
+    "Swedish": "sv",
+    "Tajik": "tg",
+    "Tamil": "ta",
+    "Tatar": "tt",
+    "Telugu": "te",
+    "Thai": "th",
+    "Turkish": "tr",
+    "Turkmen": "tk",
+    "Ukrainian": "uk",
+    "Urdu": "ur",
+    "Uyghur": "ug",
+    "Uzbek": "uz",
+    "Vietnamese": "vi",
+    "Welsh": "cy",
+    "Xhosa": "xh",
+    "Yiddish": "yi",
+    "Yoruba": "yo",
+    "Zulu": "zu"
+}
+
+reverse_language = {value: key for key, value in languages.items()}
+@client.command()
+async def translate(ctx,*, text):
+    if not text:
+        await ctx.send("Please provide a message to translate.")
+        return
+    
+    # Translate the text to the specified language
+    translated = translator.translate(text, dest="en")
+    detection = translator.detect(text)
+    detected_language = detection.lang
+    
+    embed = discord.Embed(title = "Translation",description=translated.text,color = 0xdb3dfb)
+    embed.add_field(name = "Detected language:",value = reverse_language[detected_language])
+
+    # Send the translated message
+    await ctx.send(embed = embed)
+
+@client.command()
+async def Hello(ctx):
+    await ctx.send("Hello")
+
+@client.command()
+async def translateTo(ctx,lang,*, text):
+    if not text:
+        await ctx.send("Please provide a message to translate.")
+        return
+    
+    # Translate the text to the specified language
+    translated = translator.translate(text, dest=languages[lang.capitalize()])
+    
+    embed = discord.Embed(title = translated.text,color = 0xdb3dfb)
+
+    # Send the translated message
+    await ctx.send(embed = embed)
+#Transranto component end
+
+#David start
+ffmpeg_options = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn -filter:a "volume=0.25"'}
+
+@client.command(pass_context= True)
+async def join(ctx):
+    if (ctx.author.voice):
+        channel = ctx.message.author.voice.channel
+        voice = await channel.connect()
+        await ctx.send(f"I have joined {channel}")
+    else:
+        await ctx.send("You are not in a voice channel.")
+
+@client.command(pass_context= True)
+async def leave(ctx):
+    if (ctx.voice_client):
+        await ctx.guild.voice_client.disconnect()
+        await ctx.send("I left the channel")
+    else:
+        await ctx.send("I am not in a voice channel.")
+
+@client.command(pass_context = True)
+async def pause(ctx):
+    voice = discord.utils.get(client.voice_clients,guild = ctx.guild)
+    if voice.is_playing():
+        voice.pause()
+    else:
+        ctx.send("No song is playing at this moment.")
+
+@client.command(pass_context = True)
+async def resume(ctx):
+    voice = discord.utils.get(client.voice_clients,guild = ctx.guild)
+    if voice.is_paused():
+        voice.resume()
+    else:
+        ctx.send("No song is paused at this moment.")
+
+@client.command(pass_context = True)
+async def stop(ctx):
+    voice = discord.utils.get(client.voice_clients,guild = ctx.guild)
+    if voice.is_playing() or voice.is_paused():
+        voice.stop()
+    else:
+        ctx.send("No song is playing at this moment.")
+
+@client.command(pass_context=True)
+async def play(ctx, arg):
+    # Check if the user is in a voice channel
+    if ctx.author.voice and ctx.author.voice.channel:
+        channel = ctx.author.voice.channel
+        voice_client = discord.utils.get(client.voice_clients, guild=ctx.guild)
+
+        # Check if the bot is already in a voice channel
+        if voice_client is None:
+            voice_client = await channel.connect()
+        else:
+            await voice_client.move_to(channel)
+            if voice_client.is_playing():
+                await ctx.send("A song is already playing please wait for it to finish and try again.")
+            else:
+                # Download audio from the YouTube video
+                ydl_opts = {
+                    'format': 'bestaudio/best',
+                    'postprocessors': [{
+                        'key': 'FFmpegExtractAudio',
+                        'preferredcodec': 'mp3',
+                        'preferredquality': '192',
+                    }]
+                }
+
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    info = ydl.extract_info(arg, download=False)
+                    url = info['formats'][0]['url']
+
+                # Play audio
+                voice_client.play(discord.FFmpegOpusAudio(url, **ffmpeg_options), after=lambda e: print('done', e))
+                await ctx.send('Now playing: ' + info['title'])
+    else:
+        await ctx.send("You need to be in a voice channel to use this command.")
+#David end
 
 keep_alive()
 client.run(os.environ.get("token"))
