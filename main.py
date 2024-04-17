@@ -7,6 +7,7 @@ import asyncio
 import requests
 import random
 from keep_alive import keep_alive
+import os
 
 client = commands.Bot(command_prefix="$", intents=discord.Intents.all())
 
@@ -226,4 +227,4 @@ async def createchannel(ctx, channel_name):
 
 
 keep_alive()
-client.run("MTIyOTUwNTg5NzQ1MDA0NTQ1MA.GybGuF.AAx8k3VieXySPXqcLmDUfb6ESfPGk0B6Mvujgg")
+client.run(os.environ.get("token"))
