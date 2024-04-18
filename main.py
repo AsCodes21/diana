@@ -35,7 +35,7 @@ async def get_joke():
 @client.command(pass_context=True)
 @client.event
 async def on_member_join(member: discord.Member):
-  channel = client.get_channel("1229530815336288296")
+  channel = client.get_channel(1229530815336288296)
   embed = discord.Embed(title=f"Welcome {member}",
                         description="Hope you will enjoy here.",
                         color=0x1ddb82)
@@ -52,7 +52,7 @@ async def on_member_join(member: discord.Member):
 @client.command(pass_context=True)
 @client.event
 async def on_member_remove(member: discord.Member):
-  channel = client.get_channel("1229530841223270522")
+  channel = client.get_channel(1229530841223270522)
   embed = discord.Embed(title=f"Goodbye {member}",
                         description="You will be missed.",
                         color=0xdb231d)
