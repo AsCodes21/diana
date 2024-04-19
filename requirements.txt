@@ -2,4 +2,4 @@ flask
 discord
 requests
 asyncio
-
+googletrans
