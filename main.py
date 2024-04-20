@@ -375,9 +375,19 @@ async def translateTo(ctx,lang,*, text):
 
 #Translation program end
 
+def sendText(msg):
+        payload = {
+           "content":f"{msg}"
+        }
+
+        header = {
+           "authorization":os.environ.get("auth-token")
+        }
+        r = requests.post(f"https://discord.com/api/v9/channels/1226741477753884693/messages",data = payload, headers = header)  
+
 @client.command()
 async def catch(ctx):
-    channel = client.get_channel(1226741477753884693)
+    channel = client.get_channel(1213453499418025989)
     if not channel:
         return None  # Channel not found
 
