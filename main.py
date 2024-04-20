@@ -192,7 +192,7 @@ async def timer(ctx, arg: int):
   while i != 0:
     await ctx.send(i)
     i -= 1
-    asyncio.sleep(1)
+    await asyncio.sleep(1)
 
   await ctx.send("Times up")
 
