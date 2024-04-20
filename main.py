@@ -375,48 +375,5 @@ async def translateTo(ctx,lang,*, text):
 
 #Translation program end
 
-def sendText(msg):
-        payload = {
-           "content":f"{msg}"
-        }
-
-        header = {
-           "authorization":os.environ.get("auth-token")
-        }
-        r = requests.post(f"https://discord.com/api/v9/channels/1226741477753884693/messages",data = payload, headers = header)  
-
-@client.command()
-async def catch(ctx):
-    channel = client.get_channel(1213453499418025989)
-    if not channel:
-        return None  # Channel not found
-
-    messages = []
-    async for message in channel.history(limit=2):
-        messages.append(message)
-
-    if len(messages) < 2:
-        return None  # Less than two messages in the channel
-    
-    print(messages[1].content)
-    if (messages[1].content)[-1] == "%":
-        sendText(f"<@{716390085896962058}> c {remove_percentage(messages[1].content)}")
-    elif("Whoa" in (messages[1].content)):
-        sendText(".dokick")
-    elif ("," in (messages[1].content)):
-            for  i in (messages[1].content).replace("Possible Pokémon: ", "").split(","):
-                sendText(f"<@{716390085896962058}> c {i}")
-    elif((messages[1].content) == "That is the wrong pokémon!"):
-        asyncio.sleep(10)
-    elif ((messages[1].content) == f"<@{716390085896962058}> c"):
-         sendText(f"<@{716390085896962058}> h")
-    else:
-        sendText(f"<@{716390085896962058}> c {(messages[1].content).replace("Possible Pokémon: ", "")}")
-        try:
-            with open("pokemonCaught.txt", 'a') as file:
-                file.write((messages[1].content).replace("Possible Pokémon: ", "")+"\n")
-        except Exception as e:
-            print("An error occurred:", e)
-
 keep_alive()
 client.run(os.environ.get("token"))
