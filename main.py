@@ -188,13 +188,16 @@ async def ping(ctx):
 
 @client.command()
 async def timer(ctx, arg: int):
-  i = arg
-  while i != 0:
-    await ctx.send(i)
-    i -= 1
-    await asyncio.sleep(1)
+  if arg > 60:
+    await ctx.send("Maximum value exceeded can only send a timer till 60 seconds.")  
+  else:
+    i = arg
+    while i != 0:
+      await ctx.send(i)
+      i -= 1
+      await asyncio.sleep(1)
 
-  await ctx.send("Times up")
+    await ctx.send("Times up")
 
 
 @client.command()
